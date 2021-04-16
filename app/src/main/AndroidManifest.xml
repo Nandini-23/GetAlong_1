@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.getalong">
 
+   <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,6 +24,8 @@
         <activity android:name=".Search.SearchActivity"></activity>
         <activity android:name=".Share.ShareActivity"></activity>
         <activity android:name=".Profile.AccountSettingsActivity"></activity>
+        <activity android:name=".Login.RegisterActivity"></activity>
+        <activity android:name=".Login.LoginActivity"></activity>
     </application>
 
 </manifest>

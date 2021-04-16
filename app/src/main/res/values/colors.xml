@@ -11,4 +11,5 @@
     <color name="link_blue">#0000ff</color>
 
     <color name="grey">#bfbfbf</color>
+    <color name="colorAccent">#E91E63</color>
 </resources>

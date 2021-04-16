@@ -1,4 +1,4 @@
-package com.example.getalong.Home;
+package com.example.getalong.Utils;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
