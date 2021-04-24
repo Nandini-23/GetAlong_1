@@ -16,6 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.getalong.R;
 import com.example.getalong.Utils.BottomNavigationViewHelper;
@@ -42,15 +43,27 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         Log.d(TAG,"onCreate: Started");
 
-        setupBottomNavigationView();
+        init();
+
+     /*   setupBottomNavigationView();
         setupToolBar();
         setupActivityWidgets();
         setProfileImage();
 
-        tempGridSetup();
+        tempGridSetup();*/
     }
 
-    private void tempGridSetup(){
+    private void init(){
+        Log.d(TAG, "init: inflating "+ getString(R.string.profile_fragment));
+
+        ProfileFragment fragment = new ProfileFragment();
+        FragmentTransaction transaction = ProfileActivity.this.getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(getString(R.string.profile_fragment));
+        transaction.commit();
+    }
+    
+    /*private void tempGridSetup(){
         ArrayList<String> imgURLs = new ArrayList<>();
         imgURLs.add("https://pbs.twimg.com/profile_images/616076655547682816/6gMRtQyY.jpg");
         imgURLs.add("https://i.redd.it/9bf67ygj710z.jpg");
@@ -79,13 +92,13 @@ public class ProfileActivity extends AppCompatActivity {
         gridView.setAdapter(adapter);
 
     }
-
+*/
     private void setProfileImage(){
         Log.d(TAG, "setProfileImage : setting profile photo.");
         String imgURL ="www.androidcentral.com/sites/androidcentral.com/files/styles/xlarge/public/article_images/2016/08/ac-lloyd.jpg?itok=bb72IeLf";
         UniversalImageLoader.setImage(imgURL, profilePhoto, mProgressBar, "https://");
     }
-
+/*
     private  void setupActivityWidgets(){
         mProgressBar = (ProgressBar)findViewById(R.id.profileProgressBar);
         mProgressBar.setVisibility(View.GONE);
@@ -119,5 +132,5 @@ public class ProfileActivity extends AppCompatActivity {
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
-    }
+    }*/
 }
