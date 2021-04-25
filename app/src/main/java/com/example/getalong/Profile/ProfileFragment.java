@@ -49,13 +49,13 @@ public class ProfileFragment extends Fragment {
     private DatabaseReference myRef;
     private FirebaseMethods mFirebaseMethods;
 
-    private TextView mPosts, mfolowers, mfollowing, mDisplayName, mUsername, mWebsite, mDatabase, mDescription;
+    private TextView mPosts, mFollowers, mFollowing, mDisplayName, mUsername, mWebsite, mDatabase, mDescription;
     private ProgressBar mProgressBar;
     private CircleImageView mProfilePhoto;
     private GridView gridView;
     private Toolbar toolbar;
     private ImageView profileMenu;
-    private BottomNavigationViewEx buttomNavigationView;
+    private BottomNavigationViewEx bottomNavigationView;
 
     private Context mContext;
 
@@ -67,13 +67,13 @@ public class ProfileFragment extends Fragment {
         mDescription = (TextView) view.findViewById(R.id.description);
         mProfilePhoto = (CircleImageView) view.findViewById(R.id.profile_photo);
         mPosts = (TextView) view.findViewById(R.id.tvPosts);
-        mfolowers = (TextView) view.findViewById(R.id.tvFollowers);
-        mfollowing = (TextView) view.findViewById(R.id.textFollowing);
+        mFollowers = (TextView) view.findViewById(R.id.tvFollowers);
+        mFollowing = (TextView) view.findViewById(R.id.textFollowing);
         mProgressBar = (ProgressBar) view.findViewById(R.id.profileProgressBar);
         gridView = (GridView) view.findViewById(R.id.gridView);
         toolbar = (Toolbar) view.findViewById(R.id.profileToolBar);
         profileMenu = (ImageView) view.findViewById(R.id.profileMenu);
-        buttomNavigationView = (BottomNavigationViewEx) view.findViewById(R.id.bottomNavViewBar);
+        bottomNavigationView = (BottomNavigationViewEx) view.findViewById(R.id.bottomNavViewBar);
         mContext = getActivity();
         mFirebaseMethods = new FirebaseMethods(getActivity());
 
@@ -104,6 +104,7 @@ public class ProfileFragment extends Fragment {
         Log.d(TAG, "setProfileWidgets: setting widgets with data retrieving from firebase" + userSettings.toString());
         Log.d(TAG, "setProfileWidgets: setting widgets with data retrieved from firebase database " + userSettings.getSettings().getUsername());
 
+        //USer user = userSettings.getUser();
         UserAccountSettings settings = userSettings.getSettings();
 
         UniversalImageLoader.setImage(settings.getProfile_photo(), mProfilePhoto, null, "");
@@ -113,8 +114,8 @@ public class ProfileFragment extends Fragment {
         mWebsite.setText(settings.getWebsite());
         mDescription.setText(settings.getDescription());
         mPosts.setText(String.valueOf(settings.getPosts()));
-        mfollowing.setText(String.valueOf(settings.getFollowing()));
-        mfolowers.setText(String.valueOf(settings.getFollowers()));
+        mFollowing.setText(String.valueOf(settings.getFollowing()));
+        mFollowers.setText(String.valueOf(settings.getFollowers()));
         mProgressBar.setVisibility(View.GONE);
 
 
@@ -136,9 +137,9 @@ public class ProfileFragment extends Fragment {
     //Bottom Navigation View
     private void setupBottomNavigationView(){
         Log.d(TAG, "setupBottomNavigationView: setting up Bottom Navigation View");
-        BottomNavigationViewHelper.setupBottomNavigationView(buttomNavigationView);
-        BottomNavigationViewHelper.enableNavigation(mContext, buttomNavigationView);
-        Menu menu = buttomNavigationView.getMenu();
+        BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationView);
+        BottomNavigationViewHelper.enableNavigation(mContext, bottomNavigationView);
+        Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
     }
@@ -179,7 +180,7 @@ public class ProfileFragment extends Fragment {
 
             }
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });

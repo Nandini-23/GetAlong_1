@@ -19,6 +19,11 @@
     <string name="dbname_users">users</string>
     <string name="dbname_user_account_settings">user_account_settings</string>
     <string name="field_username">username</string>
+    <string name="field_email">email</string>
+    <string name="field_displayName">display_name</string>
+    <string name="field_website">website</string>
+    <string name="field_description">description</string>
+    <string name="field_phoneNumber">phone_number</string>
 
     <!-- intent firebase -->
     <string name="calling_activity">calling_activity</string>

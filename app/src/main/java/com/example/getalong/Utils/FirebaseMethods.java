@@ -42,6 +42,37 @@ public class FirebaseMethods {
         }
     }
 
+    /*
+    update 'user_account_settings' node for the current user
+     */
+
+    public void updateUserAccountSettings(String displayName, String website, String description, long phoneNumber ){
+
+        Log.d(TAG, "updateUserAccountSettings: updating user account settings .");
+        myRef.child(mContext.getString(R.string.dbname_user_account_settings))
+                .child(userID)
+                .child(mContext.getString(R.string.field_displayName))
+                .setValue(displayName);
+
+        myRef.child(mContext.getString(R.string.dbname_user_account_settings))
+                .child(userID)
+                .child(mContext.getString(R.string.field_website))
+                .setValue(website);
+
+        myRef.child(mContext.getString(R.string.dbname_user_account_settings))
+                .child(userID)
+                .child(mContext.getString(R.string.field_description))
+                .setValue(description);
+        myRef.child(mContext.getString(R.string.dbname_user_account_settings))
+                .child(userID)
+                .child(mContext.getString(R.string.field_phoneNumber))
+                .setValue(phoneNumber);
+    }
+
+    /*
+    *update usernme in the users node and 'user_account_settings'  node
+    *username
+     */
     public void updateUsername(String username){
         Log.d(TAG, "updateUsername: updating  username to "+ username);
 
@@ -49,11 +80,27 @@ public class FirebaseMethods {
                 .child(userID)
                 .child(mContext.getString(R.string.field_username))
                 .setValue(username);
+
         myRef.child(mContext.getString(R.string.dbname_user_account_settings))
                 .child(userID)
                 .child(mContext.getString(R.string.field_username))
                 .setValue(username);
     }
+
+    /*
+    * update the email in the user's node
+     */
+
+    public void updateEmail(String email){
+        Log.d(TAG, "updateUsername: updating  username to "+ email);
+
+        myRef.child(mContext.getString(R.string.dbname_users))
+                .child(userID)
+                .child(mContext.getString(R.string.field_email))
+                .setValue(email);
+
+    }
+
 
 //    public boolean checkIfUsernameExists(String username, DataSnapshot dataSnapshot) {
 //        Log.d(TAG, "checkIfusernameExixts: chechking if" + username + " already exists.");

@@ -58,7 +58,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
         setupSettingsList();
         setupBottomNavigationView();
-        setupFragements();
+        setupFragments();
         getIncomingIntent();
 
         //For Navigating back setup backarrow
@@ -83,7 +83,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
     }
 
 
-    private void setupFragements(){
+    private void setupFragments(){
         pagerAdapter = new SectionsStatePagerAdapter(getSupportFragmentManager());
         pagerAdapter.addFragment(new EditProfileFragment(), getString(R.string.edit_profile_fragment)); //fragment0
         pagerAdapter.addFragment(new SignOutFragment(), getString(R.string.sign_out_fragment)); //fragment 1
@@ -119,7 +119,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
     private void setupBottomNavigationView(){
         Log.d(TAG, "setupBottomNavigationView: setting up Bottom Navigation View");
-        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx)findViewById(R.id.bottomNavViewBar);
+        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
         BottomNavigationViewHelper.enableNavigation(mContext, bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();

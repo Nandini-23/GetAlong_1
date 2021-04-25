@@ -22,8 +22,13 @@ import com.example.getalong.R;
 import com.example.getalong.Utils.FirebaseMethods;
 import com.example.getalong.Utils.UniversalImageLoader;
 import com.example.getalong.dialogs.ConfirmPasswordDialog;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.SignInMethodQueryResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,7 +39,67 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class EditProfileFragment extends Fragment {
+public class EditProfileFragment extends Fragment implements
+        ConfirmPasswordDialog.OnConfirmPasswordListener {
+
+    @Override
+    public void onConfirmPassword(String password) {
+        Log.d(TAG, "onConfirmPassword: got the password:" + password);
+
+
+        // Get auth credentials from the user for re-authentication. The example below shows
+        // email and password credentials but there are multiple possible providers,
+        // such as GoogleAuthProvider or FacebookAuthProvider.
+        AuthCredential credential = EmailAuthProvider
+                .getCredential(mAuth.getCurrentUser().getEmail(), password);
+
+        // Prompt the user to re-provide their sign-in credentials
+        mAuth.getCurrentUser().reauthenticate(credential)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User re-authenticated.");
+
+
+                            /// check to see if the email is already present in the database
+                            mAuth.fetchSignInMethodsForEmail(mEmail.getText().toString()).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+                                    if (task.isSuccessful()) {
+                                        try {
+
+                                            if (task.getResult().getSignInMethods().size() == 1) {
+                                                Log.d(TAG, "onComplete: that email is already in use.");
+                                                Toast.makeText(getActivity(), "That email is already in use ", Toast.LENGTH_SHORT).show();
+                                            } else if (task.getResult().getSignInMethods().size() == 0) {
+                                                Log.d(TAG, "onComplete: that email is available.");
+
+                                                //the email is available to update it
+                                                mAuth.getCurrentUser().updateEmail(mEmail.getText().toString())
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            public void onComplete(Task<Void> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    Log.d(TAG, "onComplete: user email address updated");
+                                                                    Toast.makeText(getActivity(), "email updated  ", Toast.LENGTH_SHORT).show();
+                                                                    mFirebaseMethods.updateEmail(mEmail.getText().toString());
+                                                                }
+                                                            }
+                                                        });
+                                            }
+                                        } catch (NullPointerException e) {
+                                            Log.e(TAG, "onComplete: NullPointerException:" + e.getMessage());
+                                        }
+                                    }
+                                }
+                            });
+
+                        } else {
+                            Log.d(TAG, "onComplete: re-authenticate failed.");
+                        }
+                    }
+                });
+    }
 
     private static final String TAG = "EditProfileFragment";
 
@@ -120,13 +185,28 @@ public class EditProfileFragment extends Fragment {
             //step1 Reauthenticate
             //   -confirm password and email
             ConfirmPasswordDialog dialog = new ConfirmPasswordDialog();
+            assert getFragmentManager() != null;
             dialog.show(getFragmentManager(), getString(R.string.confirm_password_dialog));
+            dialog.setTargetFragment(EditProfileFragment.this, 1);
 
             //step2 check if the email already is registered
             //      - fetchProviderForEmail(String email
             //step3 change the email
             //      - submit the new email to the database and authentication
 
+        }
+
+        if(!mUserSettings.getSettings().getDisplay_name().equals(displayName)){
+            //update displayName
+        }
+        if(!mUserSettings.getSettings().getWebsite().equals(website)){
+            //update website
+        }
+        if(!mUserSettings.getSettings().getDescription().equals(description)){
+            //update description
+        }
+        if(!mUserSettings.getSettings().getProfile_photo().equals(phoneNumber)){
+            //update phoneNumber
         }
     }
 
@@ -190,6 +270,12 @@ public class EditProfileFragment extends Fragment {
 
     }
 
+//    private void setProfileImage(){
+//        Log.d(TAG, "setProfileImage:  setting profile image .");
+//        String imgURL = "www.androidcentral.com/sites/androidcentral.com/files/styles/xlarge/public/article_images/2016/08/ac-lloyd.jpg?itok=bb72IeLf";
+//        UniversalImageLoader.setImage(imgURL, mProfilePhoto, null, "https.//");
+//    }
+
 
     /* ****************Frebase ******************/
     //setup the firebase auth object
@@ -247,5 +333,6 @@ public class EditProfileFragment extends Fragment {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
+
 
 }
